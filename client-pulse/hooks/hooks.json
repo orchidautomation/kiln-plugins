@@ -1,0 +1,23 @@
+{
+  "SessionStart": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/load-env.js"
+        }
+      ]
+    }
+  ],
+  "PreToolUse": [
+    {
+      "matcher": "Bash",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node -e \"process.exit(process.env.FATHOM_API_KEY ? 0 : (console.log('⚠️ FATHOM_API_KEY may not be set - check .env'), 0))\""
+        }
+      ]
+    }
+  ]
+}
