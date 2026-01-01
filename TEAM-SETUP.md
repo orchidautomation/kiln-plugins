@@ -52,17 +52,30 @@ This adds Rube to your global config (`~/.claude.json`) so it works everywhere.
 1. Go to https://fathom.video/settings/api
 2. Copy your API key
 
-### 6. Create your .env file
+### 6. Create your personal config files
 
 ```bash
 cd ~/kiln-plugins/client-pulse
+
+# Copy templates
 cp .env.example .env
+cp config.example.yaml config.yaml
 ```
 
 Edit `.env`:
 ```
 FATHOM_API_KEY=paste_your_key_here
 ```
+
+Edit `config.yaml`:
+- Add your name, role, Slack ID under `me:`
+- Add each client you work with under `clients:`
+- Fill in Slack channel IDs, Monday board IDs, contacts
+
+**How to find IDs:**
+- Slack channel ID: Right-click channel → Copy link → extract `C12345678`
+- Monday board ID: From URL `monday.com/boards/[THIS_NUMBER]`
+- Slack user ID: View profile → More → Copy member ID
 
 ### 7. Test it
 
@@ -96,11 +109,18 @@ Then run:
 |-----------|------------------|----------------------|
 | Plugin code | ✅ | |
 | Agent prompts | ✅ | |
-| `config.yaml` | ✅ | |
-| `.env` file | | ✅ (gitignored) |
+| `config.example.yaml` | ✅ (template) | |
+| `config.yaml` | | ✅ (your clients, gitignored) |
+| `.env` file | | ✅ (your API keys, gitignored) |
 | Fathom API key | | ✅ |
 | Rube account | | ✅ |
 | Rube app connections | | ✅ |
+
+**Each team member customizes:**
+- Which clients they work with
+- Their Slack channel IDs
+- Their Monday.com board IDs
+- Their contacts and keywords
 
 ---
 

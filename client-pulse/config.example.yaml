@@ -1,0 +1,111 @@
+# Client Pulse Plugin Configuration
+# ============================================================================
+# INSTRUCTIONS:
+# 1. Copy this file to config.yaml: cp config.example.yaml config.yaml
+# 2. Fill in YOUR clients, channels, contacts, and board IDs
+# 3. config.yaml is gitignored - your personal data stays local
+# ============================================================================
+
+# =============================================================================
+# YOUR INFO
+# =============================================================================
+me:
+  name: "Your Name"
+  role: "GTM Engineer"  # or "Technical Operations Specialist", etc.
+  email: "you@company.com"
+  slack_id: "U12345678"  # Your Slack member ID
+
+# =============================================================================
+# CLIENT CONFIGURATION
+# Add one entry per client you work with
+# =============================================================================
+clients:
+  # Example client - copy this block for each client
+  client_key:  # lowercase, no spaces (used in commands: /client-pulse client_key)
+    display_name: "Client Name"
+    emoji: "🏢"
+    description: "What this client does"
+
+    # Domains for filtering Fathom calls and emails
+    domains:
+      - "clientdomain.com"
+      - "client.io"
+
+    # Keywords for filtering internal sync transcripts
+    keywords:
+      - "Client Name"
+      - "Contact Name"
+      - "Product Name"
+
+    # Primary contacts at this client
+    contacts:
+      - name: "Jane Doe"
+        slack_id: "U87654321"  # Their Slack ID (from Slack Connect)
+        role: "Primary POC"
+      - name: "John Smith"
+        role: "Stakeholder"
+
+    # Slack channels for this client
+    slack:
+      external:
+        id: "C12345678"  # Right-click channel > Copy link > extract ID
+        name: "ext-client-name"
+      internal:
+        id: "C87654321"
+        name: "int-client-name"
+
+    # Monday.com board for this client
+    monday:
+      board_id: 1234567890  # From Monday URL: monday.com/boards/[THIS_NUMBER]
+      board_name: "Client // Projects"
+
+  # -------------------------------------------------------------------------
+  # Add more clients below (copy the block above)
+  # -------------------------------------------------------------------------
+  # another_client:
+  #   display_name: "Another Client"
+  #   ...
+
+# =============================================================================
+# DATA SOURCE CONFIGURATION
+# Usually don't need to change these
+# =============================================================================
+data_sources:
+  fathom:
+    enabled: true
+    api_endpoint: "https://api.fathom.ai/external/v1/meetings"
+    env_var: "FATHOM_API_KEY"
+
+  slack:
+    enabled: true
+    external_channel_limit: 200
+    internal_channel_limit: 100
+
+  monday:
+    enabled: true
+    active_group_id: "Active"  # Group name for active tasks
+    task_limit: 100
+
+  gmail:
+    enabled: true
+    max_results: 50
+    priority: "low"
+
+  calendar:
+    enabled: true
+    lookahead_days: 14
+
+# =============================================================================
+# AGENT BEHAVIOR
+# =============================================================================
+behavior:
+  default_lookback_days: 7
+  expand_all_threads_in_range: true
+
+  urgent_thresholds:
+    unanswered_hours: 24
+    overdue_task_days: 0
+    stale_thread_days: 3
+
+  minimum_sources_required: 1
+  required_source: "slack_external"
