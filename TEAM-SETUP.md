@@ -139,125 +139,145 @@ rube-kiln: https://rube.app/mcp (HTTP) - ✓ Connected
 
 ## Tool Permissions (Rube Dashboard)
 
-The client-pulse agent only needs **READ access**. In your Rube dashboard, you can disable write tools to prevent accidental modifications.
+These tools enable AI to help with your core GTM engineering work: reading client data, posting internal updates, managing tasks, drafting emails, and scheduling meetings.
 
 ### Slack Tools
 
-**✅ ENABLE (Required):**
+**✅ READ (Required):**
 | Tool | Purpose |
 |------|---------|
 | `SLACK_FETCH_CONVERSATION_HISTORY` | Get channel messages |
 | `SLACK_FETCH_MESSAGE_THREAD_FROM_A_CONVERSATION` | Get thread replies |
 | `SLACK_RETRIEVE_MESSAGE_PERMALINK_URL` | Get permalinks for items |
-
-**✅ ENABLE (Optional but recommended):**
-| Tool | Purpose |
-|------|---------|
 | `SLACK_SEARCH_MESSAGES` | Search messages by keyword/date |
 | `SLACK_LIST_ALL_CHANNELS` | List available channels |
 | `SLACK_FIND_CHANNELS` | Find channels by name |
 | `SLACK_LIST_CONVERSATIONS` | List DMs and channels |
+| `SLACK_RETRIEVE_CONVERSATION_INFORMATION` | Get channel details |
 
-**❌ DISABLE (Write operations - not needed):**
-- `SLACK_SEND_MESSAGE` / `SLACK_POST_MESSAGE`
-- `SLACK_CREATE_*` (channels, etc.)
-- `SLACK_DELETE_*`
-- `SLACK_UPDATE_*`
-- `SLACK_SET_*`
-- `SLACK_ADD_*` / `SLACK_REMOVE_*`
+**✅ WRITE (Internal team updates):**
+| Tool | Purpose |
+|------|---------|
+| `SLACK_SEND_MESSAGE` | Post updates to int-* channels |
+| `SLACK_SCHEDULE_MESSAGE` | Schedule messages for later |
+| `SLACK_FIND_USER_BY_EMAIL_ADDRESS` | Resolve user IDs for @mentions |
+
+**❌ DISABLE (Dangerous):**
+- `SLACK_DELETE_*` - Permanent message deletion
+- `SLACK_CREATE_CHANNEL` - Don't auto-create channels
+- `SLACK_ARCHIVE_*` - Don't archive channels
+- `SLACK_INVITE_*` / `SLACK_KICK_*` - Member management
+- `SLACK_SET_*` - Channel settings
 
 ---
 
 ### Monday.com Tools
 
-**✅ ENABLE (Required):**
+**✅ READ (Required):**
 | Tool | Purpose |
 |------|---------|
-| `MONDAY_LIST_BOARDS` | List all boards |
+| `MONDAY_BOARDS` / `MONDAY_LIST_BOARDS` | List all boards |
 | `MONDAY_LIST_GROUPS` | List groups in a board |
 | `MONDAY_LIST_BOARD_ITEMS` | List items in a board |
 | `MONDAY_LIST_ITEMS` | Get item details (for subitems) |
-
-**✅ ENABLE (Optional but recommended):**
-| Tool | Purpose |
-|------|---------|
+| `MONDAY_LIST_COLUMNS` | Get column definitions |
 | `MONDAY_GET_GROUP_DETAILS` | Get group info |
 | `MONDAY_GET_ME` | Get current user |
 | `MONDAY_GET_WORKSPACES` | List workspaces |
 
-**❌ DISABLE (Write operations - not needed):**
-- `MONDAY_CREATE_*` (items, boards, groups, etc.)
-- `MONDAY_UPDATE_*`
-- `MONDAY_DELETE_*`
-- `MONDAY_ARCHIVE_*`
-- `MONDAY_MOVE_*`
-- `MONDAY_DUPLICATE_*`
+**✅ WRITE (Task management):**
+| Tool | Purpose |
+|------|---------|
+| `MONDAY_CREATE_ITEM` | Create new tasks |
+| `MONDAY_CREATE_UPDATE` | Add comments/notes to items |
+| `MONDAY_CHANGE_SIMPLE_COLUMN_VALUE` | Update status, assign people |
+| `MONDAY_UPDATE_ITEM` | Update complex column values |
+
+**❌ DISABLE (Dangerous):**
+- `MONDAY_DELETE_*` - Permanent item deletion
+- `MONDAY_ARCHIVE_BOARD` - Don't archive whole boards
+- `MONDAY_CREATE_BOARD` - Don't auto-create boards
+- `MONDAY_DUPLICATE_*` - Avoid accidental duplication
 
 ---
 
 ### Gmail Tools
 
-**✅ ENABLE (Required):**
+**✅ READ (Required):**
 | Tool | Purpose |
 |------|---------|
 | `GMAIL_FETCH_EMAILS` | Search and fetch emails |
-
-**✅ ENABLE (Optional but recommended):**
-| Tool | Purpose |
-|------|---------|
 | `GMAIL_FETCH_MESSAGE_BY_MESSAGE_ID` | Get specific message |
 | `GMAIL_FETCH_MESSAGE_BY_THREAD_ID` | Get email thread |
 | `GMAIL_LIST_THREADS` | List email threads |
 | `GMAIL_LIST_LABELS` | List labels for filtering |
 | `GMAIL_GET_ATTACHMENT` | Get attachments |
+| `GMAIL_SEARCH_PEOPLE` | Find contacts by name |
+| `GMAIL_GET_CONTACTS` | List contacts |
 
-**❌ DISABLE (Write operations - not needed):**
-- `GMAIL_SEND_EMAIL` / `GMAIL_SEND_*`
-- `GMAIL_CREATE_*` (drafts, labels, etc.)
-- `GMAIL_DELETE_*`
-- `GMAIL_TRASH_*`
-- `GMAIL_BATCH_MODIFY_MESSAGES`
-- `GMAIL_MODIFY_*`
+**✅ WRITE (Human-in-the-loop drafts):**
+| Tool | Purpose |
+|------|---------|
+| `GMAIL_CREATE_EMAIL_DRAFT` | Create drafts for review |
+| `GMAIL_LIST_DRAFTS` | List existing drafts |
+| `GMAIL_SEND_DRAFT` | Send after human approval |
+| `GMAIL_DELETE_DRAFT` | Clean up unused drafts |
+
+**❌ DISABLE (Bypass human review):**
+- `GMAIL_SEND_EMAIL` - Direct send without review
+- `GMAIL_DELETE_*` (messages) - Permanent deletion
+- `GMAIL_TRASH_*` - Moving to trash
+- `GMAIL_BATCH_MODIFY_MESSAGES` - Bulk label changes
 
 ---
 
 ### Google Calendar Tools
 
-**✅ ENABLE (Required):**
+**✅ READ (Required):**
 | Tool | Purpose |
 |------|---------|
+| `GOOGLECALENDAR_LIST_CALENDARS` | List available calendars |
 | `GOOGLECALENDAR_EVENTS_LIST` | List calendar events |
 | `GOOGLECALENDAR_FIND_EVENT` | Search for events |
-| `GOOGLECALENDAR_LIST_CALENDARS` | List available calendars |
-
-**✅ ENABLE (Optional but recommended):**
-| Tool | Purpose |
-|------|---------|
 | `GOOGLECALENDAR_GET_CALENDAR` | Get calendar details |
 | `GOOGLECALENDAR_GET_CURRENT_DATE_TIME` | Get current time/timezone |
-| `GOOGLECALENDAR_FIND_FREE_SLOTS` | Find free/busy slots |
+| `GOOGLECALENDAR_FIND_FREE_SLOTS` | Find availability |
+| `GOOGLECALENDAR_FREE_BUSY_QUERY` | Check busy times |
 | `GOOGLECALENDAR_SYNC_EVENTS` | Sync events |
-| `GOOGLECALENDAR_EVENTS_INSTANCES` | Get recurring event instances |
+| `GOOGLECALENDAR_EVENTS_INSTANCES` | Get recurring instances |
 
-**❌ DISABLE (Write operations - not needed):**
-- `GOOGLECALENDAR_CREATE_*` (events, calendars, etc.)
-- `GOOGLECALENDAR_UPDATE_*`
-- `GOOGLECALENDAR_DELETE_*`
-- `GOOGLECALENDAR_QUICK_ADD_*`
-- `GOOGLECALENDAR_MOVE_*`
-- `GOOGLECALENDAR_PATCH_*`
+**✅ WRITE (Scheduling):**
+| Tool | Purpose |
+|------|---------|
+| `GOOGLECALENDAR_CREATE_EVENT` | Schedule meetings & invites |
+
+**❌ DISABLE (Dangerous):**
+- `GOOGLECALENDAR_DELETE_EVENT` - Cancel meetings
+- `GOOGLECALENDAR_UPDATE_EVENT` - Modify existing meetings
+- `GOOGLECALENDAR_MOVE_*` - Move events between calendars
+- `GOOGLECALENDAR_PATCH_*` - Partial updates
 
 ---
 
-## Summary: Minimum Tools by App
+## Summary: Recommended Tools by App
 
-| App | Required Tools | Count |
-|-----|----------------|-------|
-| **Slack** | `FETCH_CONVERSATION_HISTORY`, `FETCH_MESSAGE_THREAD_FROM_A_CONVERSATION`, `RETRIEVE_MESSAGE_PERMALINK_URL` | 3 |
-| **Monday** | `LIST_BOARDS`, `LIST_GROUPS`, `LIST_BOARD_ITEMS`, `LIST_ITEMS` | 4 |
-| **Gmail** | `FETCH_EMAILS` | 1 |
-| **Calendar** | `EVENTS_LIST`, `FIND_EVENT`, `LIST_CALENDARS` | 3 |
+| App | Read | Write | Total |
+|-----|------|-------|-------|
+| **Slack** | 8 | 3 | 11 |
+| **Monday** | 8 | 4 | 12 |
+| **Gmail** | 8 | 4 | 12 |
+| **Calendar** | 9 | 1 | 10 |
 
-**Total minimum: 11 tools** (out of ~300+ available across all apps)
+**Total: ~45 tools** (out of ~300+ available)
 
-This keeps the agent focused on READ-ONLY operations and prevents accidental writes to your Slack, Monday, Gmail, or Calendar.
+### Safety Philosophy
+
+| Category | Approach |
+|----------|----------|
+| **Read** | ✅ Full access - can't break anything |
+| **Create** | ✅ Safe - creates new things, doesn't modify existing |
+| **Update** | ⚠️ Selective - only low-risk updates (status, comments) |
+| **Delete** | ❌ Disabled - permanent data loss |
+| **Send (direct)** | ❌ Disabled - use drafts with human review |
+
+This lets AI handle 90% of your GTM work while keeping humans in the loop for irreversible actions.
