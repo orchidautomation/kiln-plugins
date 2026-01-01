@@ -1,0 +1,15 @@
+# Environment files (contain API keys)
+.env
+*.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Node modules (if any)
+node_modules/
