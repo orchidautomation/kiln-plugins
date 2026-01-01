@@ -6,65 +6,68 @@ This is the **plugin marketplace** for The Kiln's GTM engineering team. It conta
 
 ---
 
-## Company & Role Context
+## GTM Engineering Context
 
 ### What is a GTM Engineer?
 
-A **GTM Engineer** (Go-to-Market Engineer) designs, builds, and automates revenue-generating systems using AI and automation. We act as an internal product team for go-to-market organizations, focusing on scaling and automating systems that drive sales, marketing, and customer success.
+A **GTM Engineer** (Go-to-Market Engineer) is a technical specialist who designs, builds, and scales automated systems to execute go-to-market strategies. We bridge product, sales, marketing, and revenue operations—acting as an internal product team that turns manual processes into scalable automation.
 
 **Core Responsibilities:**
-- **Build automated GTM systems:** Create sophisticated workflows connecting marketing, sales, and RevOps, replacing manual processes with scalable automation
-- **Rapid prototyping & experimentation:** Quickly identify problems, create specs, ship prototypes, and scale solutions based on measured results (meetings booked, hours saved, pipeline generated)
-- **Custom AI agent development:** Build AI-powered enrichment pipelines, research agents, and personalization systems that find unique datapoints at scale
-- **Systems integration:** Orchestrate data across CRM platforms (Salesforce, HubSpot), enrichment tools, intent signal providers, and the entire GTM tech stack
-- **Data fluency & cleanliness:** Ensure data used in automations is clean, useful, and consistently available across teams
-- **Template & scale workflows:** Build repeatable systems that can be rolled out org-wide, turning successful experiments into standardized processes
+- **Build automated GTM systems:** Create workflows connecting marketing, sales, and RevOps—replacing manual processes with scalable automation
+- **Rapid prototyping:** Quickly identify problems, ship prototypes, and scale solutions based on measured results (meetings booked, hours saved, pipeline generated)
+- **AI agent development:** Build AI-powered enrichment pipelines, research agents, and personalization systems that find unique datapoints at scale
+- **Systems integration:** Orchestrate data across CRMs (Salesforce, HubSpot), enrichment tools, intent signal providers, and the entire GTM tech stack
+- **Data fluency:** Ensure data used in automations is clean, useful, and consistently available across teams
 
 **Skills & Approach:**
-- **Technical automation:** Expert in no-code/low-code tools (especially Clay), APIs, webhooks, and AI to build scalable workflows without traditional engineering resources
-- **Systems thinking:** Understand how GTM systems interconnect and where bottlenecks slow down execution
+- **Technical automation:** Expert in no-code/low-code tools (especially Clay), APIs, webhooks, and AI
+- **Systems thinking:** Understand how GTM systems interconnect and where bottlenecks slow execution
 - **Collapse traditional roles:** Automate work traditionally done by SDRs, BDRs, and sales ops—turning weeks of manual work into automated flows
-- **10x efficiency mindset:** Enable teams to scale 10x by automating repeatable tasks, freeing them to focus on high-impact, creative, strategic work
+- **10x efficiency mindset:** Enable teams to scale by automating repeatable tasks, freeing them for high-impact, strategic work
 
-**Impact on Revenue Teams:**
-- Close the gap between ideas and execution—from quarters to days or hours
-- Turn chaos into flow—generate and close pipeline opportunities more efficiently with fewer people
-- Enable rapid experimentation with new data sources, signals, and outreach strategies
+**How GTM Engineers Differ from Traditional Ops:**
+| Role | Focus |
+|------|-------|
+| **GTM Engineer** | End-to-end technical engineering of GTM systems with coding, AI automation, and custom builds for scalability |
+| **Sales Ops** | Sales-specific processes, CRM hygiene, forecasting within sales team |
+| **Marketing Ops** | Marketing tech stack, campaign tracking, lead management |
+
+GTM Engineers build unified, automated "connective tissue" across all GTM functions—not siloed ops.
+
+---
 
 ### About The Kiln
 
-**The Kiln** (thekiln.com) is a certified Clay Elite Studio - a team of GTM experts, automation specialists, data scientists, and early Clay employees.
+**The Kiln** (thekiln.com) is a Clay Elite Studio and GTM engineering agency that designs custom, AI-powered systems for inbound, outbound, marketing, and RevOps.
+
+**Philosophy:** Customer-obsessed, high-touch service for a select few clients rather than high-volume systematization. We deliver excessive value through flexible service (48-hour turnarounds, custom ideas exceeding expectations).
 
 **Core Services:**
-- **Sales/GTM:** Automated GTM co-pilots, TAM mapping, deep enrichment, personalized outbound at scale, lead qualification, mid-funnel automation
-- **Marketing/Growth:** Inbound lead enrichment, account scoring, inbound-led outbound sequences, paid ads audience building, custom landing pages at scale, deep ICP research
-- **RevOps:** CRM data cleaning, automated enrichment, data normalization, account/contact/lead research, automated campaign updates, CRM lead scoring
+- **Sales/GTM:** Automated account research, list building, pre-meeting prep, CRM updates, outbound personalization, hyper-personalized multi-channel campaigns
+- **Marketing/Growth:** Custom Clay tables, AI-driven email generation, inbound strategy, waterfall enrichment with SOPs
+- **RevOps:** Transform data and signals into high-intent pipeline, CRM intelligence, data cleaning
 
-**Our Approach:**
-- We invest deep time (GTM engineers work on only a few clients at a time)
-- Highly technical execution - we ship real solutions, not just strategy
-- Custom is our comfort zone - we specialize in complex, bespoke projects
-- We help clients consolidate their GTM tech stack and move from manual work to scalable automation
+**Results:** $40M+ in pipeline generated for clients. Scaled manual campaigns to launch in hours.
 
-**Notable Clients:** Azuga, Sendoso, OpenAI, Vanta, Verkada, Anthropic, Notion, Rippling, and others
+**Notable Clients:** Windsurf, Browserbase, Sendoso, Loxo, Antimetal, NewStore, OpenAI, Vanta, Verkada, Anthropic, Notion, Rippling
+
+---
 
 ### About Clay.com
 
-**Clay** is the central platform we use for GTM engineering work. It's a data enrichment and GTM automation platform that serves as the foundation for modern go-to-market teams.
+**Clay** is the central platform for GTM engineering work—a data enrichment and automation platform that serves as the foundation for modern go-to-market teams.
 
 **Key Capabilities:**
-- **150+ Data Providers:** Access premium data from providers like Apollo, ZoomInfo, Clearbit, People Data Labs, and more in one unified platform
-- **AI Research Agents (Claygent):** Build AI agents that search public databases, navigate gated forms, scrape unstructured data, and find unique datapoints at scale
-- **Intent Signals:** Monitor and act on job changes, website visits, company mentions, funding events, and other buying signals
-- **Workflow Automation:** Build conditional logic, waterfall enrichment sequences, and complex GTM workflows without engineering resources
-- **CRM Integration:** Sync millions of records, enrich them, and push updated data back to Salesforce, HubSpot, or any tool via HTTP API
-- **Native Sequencer:** Launch personalized outbound campaigns directly from enriched data
+- **150+ Data Providers:** Apollo, ZoomInfo, Clearbit, People Data Labs, and more in one platform
+- **AI Research Agents (Claygent):** Build AI agents that search databases, navigate gated forms, scrape unstructured data at scale
+- **Intent Signals:** Monitor job changes, website visits, company mentions, funding events
+- **Workflow Automation:** Conditional logic, waterfall enrichment, complex GTM workflows without engineering resources
+- **CRM Integration:** Sync millions of records, enrich, push back to Salesforce/HubSpot
 
-**Why Clay Matters for GTM Engineering:**
-- Consolidates 100+ data tools into one subscription (no contracts, renewals, or implementation hassle)
-- Enables rapid experimentation - test new data sources and workflows in minutes, not months
-- Combines enrichment, AI research, intent monitoring, and action orchestration in one place
-- Supports complex custom workflows that would normally require dedicated engineering resources
+**Why Clay Matters:**
+- Consolidates 100+ data tools into one subscription
+- Enables rapid experimentation—test new workflows in minutes, not months
+- Supports complex custom workflows that would normally require dedicated engineering
 
 ---
 
@@ -90,22 +93,7 @@ Aggregates data from 6 sources into an actionable client report:
 /client-pulse profound 14  # Last 14 days
 ```
 
----
-
-## Client Intelligence Smart Routing
-
-When encountering client-related questions, automatically recognize the pattern and use the right approach:
-
-| User Says | Pattern | Action |
-|-----------|---------|--------|
-| "What did we discuss with [client]?" | Meeting/call inquiry | Quick Fathom API call |
-| "Any updates in the [client] channel?" | Slack check | Quick Rube MCP call |
-| "What's pending for [client]?" | Task check | Quick Monday MCP call |
-| "Give me a full pulse on [client]" | Comprehensive | Run `/client-pulse` |
-| "Catch me up on all clients" | Full report | Run `/client-pulse` |
-| "Prep me for [client] call" | Call prep | Quick Fathom + Slack |
-
-**When to use full client-pulse:**
+**When to use client-pulse:**
 - Cross-source analysis (correlating Fathom + Slack + Monday)
 - Multi-client comparison or workload balance
 - Finding open items, blockers, and patterns
@@ -115,10 +103,10 @@ When encountering client-related questions, automatically recognize the pattern 
 
 ## Configuration
 
-**All client-specific data lives in `config.yaml`** (gitignored, personal to each user).
+**All client-specific data lives in `config.yaml`** (gitignored, personal to each GTM engineer).
 
 Each team member defines:
-- Their name, role, Slack ID
+- Their name, email, Slack ID
 - Which clients they work with
 - Slack channel IDs for each client
 - Monday.com board IDs
@@ -129,6 +117,12 @@ Each team member defines:
 ### Example Client Config Structure
 
 ```yaml
+me:
+  name: "Your Name"
+  role: "GTM Engineer"
+  email: "you@thekiln.com"
+  slack_id: "U12345678"
+
 clients:
   sendoso:
     display_name: "Sendoso"
@@ -168,40 +162,6 @@ Rube provides:
 
 ---
 
-## Fathom API Integration
-
-**Purpose:** Fetch recorded meeting transcripts, summaries, and action items.
-
-**API Configuration:**
-- Endpoint: `https://api.fathom.ai/external/v1/meetings`
-- Auth: `X-Api-Key` header
-- Environment Variable: `$FATHOM_API_KEY`
-
-**Key Parameters:**
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `include_transcript` | boolean | Include full meeting transcript |
-| `include_summary` | boolean | Include AI-generated summary |
-| `include_action_items` | boolean | Include extracted action items |
-| `created_after` | ISO 8601 | Filter meetings after this date |
-| `created_before` | ISO 8601 | Filter meetings before this date |
-
-**Usage Example:**
-```bash
-DAYS=7
-CREATED_AFTER=$(node -e "console.log(new Date(Date.now() - ${DAYS}*24*60*60*1000).toISOString())")
-
-curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=${CREATED_AFTER}" \
-  -H "X-Api-Key: $FATHOM_API_KEY"
-```
-
-**Filtering Logic:**
-- **External calls:** Include if ANY `calendar_invitees[].email_domain` matches client domains
-- **Internal syncs:** Include if transcript contains client keywords
-- Use `calendar_invitees_domains_type` to distinguish: `"one_or_more_external"` vs `"only_internal"`
-
----
-
 ## Tool Permissions Philosophy
 
 | Action | Enabled | Reasoning |
@@ -222,23 +182,6 @@ See `TEAM-SETUP.md` for the full tool permission checklist.
 2. **Email:** Create DRAFTS only, never send directly
 3. **Calendar:** Confirm before creating invites with external attendees
 4. **Monday:** Show changes before updating items
-
----
-
-## Slack Message Formatting (via Rube/Composio)
-
-**Use `text` instead of `markdown_text` for natural line wrapping.**
-
-- `markdown_text`: Creates section blocks that wrap at narrow widths (looks choppy)
-- `text`: Plain text that flows naturally and wraps to full message width
-
-**Example (correct):**
-```python
-SLACK_SEND_MESSAGE({
-  "channel": "C123456",
-  "text": "Hey - here's the update.\n\nParagraph two flows naturally without weird breaks."
-})
-```
 
 ---
 
