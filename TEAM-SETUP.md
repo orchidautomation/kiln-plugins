@@ -134,3 +134,130 @@ rube-kiln: https://rube.app/mcp (HTTP) - ✓ Connected
 ```
 
 **Rube Dashboard:** https://rube.app (manage app connections)
+
+---
+
+## Tool Permissions (Rube Dashboard)
+
+The client-pulse agent only needs **READ access**. In your Rube dashboard, you can disable write tools to prevent accidental modifications.
+
+### Slack Tools
+
+**✅ ENABLE (Required):**
+| Tool | Purpose |
+|------|---------|
+| `SLACK_FETCH_CONVERSATION_HISTORY` | Get channel messages |
+| `SLACK_FETCH_MESSAGE_THREAD_FROM_A_CONVERSATION` | Get thread replies |
+| `SLACK_RETRIEVE_MESSAGE_PERMALINK_URL` | Get permalinks for items |
+
+**✅ ENABLE (Optional but recommended):**
+| Tool | Purpose |
+|------|---------|
+| `SLACK_SEARCH_MESSAGES` | Search messages by keyword/date |
+| `SLACK_LIST_ALL_CHANNELS` | List available channels |
+| `SLACK_FIND_CHANNELS` | Find channels by name |
+| `SLACK_LIST_CONVERSATIONS` | List DMs and channels |
+
+**❌ DISABLE (Write operations - not needed):**
+- `SLACK_SEND_MESSAGE` / `SLACK_POST_MESSAGE`
+- `SLACK_CREATE_*` (channels, etc.)
+- `SLACK_DELETE_*`
+- `SLACK_UPDATE_*`
+- `SLACK_SET_*`
+- `SLACK_ADD_*` / `SLACK_REMOVE_*`
+
+---
+
+### Monday.com Tools
+
+**✅ ENABLE (Required):**
+| Tool | Purpose |
+|------|---------|
+| `MONDAY_LIST_BOARDS` | List all boards |
+| `MONDAY_LIST_GROUPS` | List groups in a board |
+| `MONDAY_LIST_BOARD_ITEMS` | List items in a board |
+| `MONDAY_LIST_ITEMS` | Get item details (for subitems) |
+
+**✅ ENABLE (Optional but recommended):**
+| Tool | Purpose |
+|------|---------|
+| `MONDAY_GET_GROUP_DETAILS` | Get group info |
+| `MONDAY_GET_ME` | Get current user |
+| `MONDAY_GET_WORKSPACES` | List workspaces |
+
+**❌ DISABLE (Write operations - not needed):**
+- `MONDAY_CREATE_*` (items, boards, groups, etc.)
+- `MONDAY_UPDATE_*`
+- `MONDAY_DELETE_*`
+- `MONDAY_ARCHIVE_*`
+- `MONDAY_MOVE_*`
+- `MONDAY_DUPLICATE_*`
+
+---
+
+### Gmail Tools
+
+**✅ ENABLE (Required):**
+| Tool | Purpose |
+|------|---------|
+| `GMAIL_FETCH_EMAILS` | Search and fetch emails |
+
+**✅ ENABLE (Optional but recommended):**
+| Tool | Purpose |
+|------|---------|
+| `GMAIL_FETCH_MESSAGE_BY_MESSAGE_ID` | Get specific message |
+| `GMAIL_FETCH_MESSAGE_BY_THREAD_ID` | Get email thread |
+| `GMAIL_LIST_THREADS` | List email threads |
+| `GMAIL_LIST_LABELS` | List labels for filtering |
+| `GMAIL_GET_ATTACHMENT` | Get attachments |
+
+**❌ DISABLE (Write operations - not needed):**
+- `GMAIL_SEND_EMAIL` / `GMAIL_SEND_*`
+- `GMAIL_CREATE_*` (drafts, labels, etc.)
+- `GMAIL_DELETE_*`
+- `GMAIL_TRASH_*`
+- `GMAIL_BATCH_MODIFY_MESSAGES`
+- `GMAIL_MODIFY_*`
+
+---
+
+### Google Calendar Tools
+
+**✅ ENABLE (Required):**
+| Tool | Purpose |
+|------|---------|
+| `GOOGLECALENDAR_EVENTS_LIST` | List calendar events |
+| `GOOGLECALENDAR_FIND_EVENT` | Search for events |
+| `GOOGLECALENDAR_LIST_CALENDARS` | List available calendars |
+
+**✅ ENABLE (Optional but recommended):**
+| Tool | Purpose |
+|------|---------|
+| `GOOGLECALENDAR_GET_CALENDAR` | Get calendar details |
+| `GOOGLECALENDAR_GET_CURRENT_DATE_TIME` | Get current time/timezone |
+| `GOOGLECALENDAR_FIND_FREE_SLOTS` | Find free/busy slots |
+| `GOOGLECALENDAR_SYNC_EVENTS` | Sync events |
+| `GOOGLECALENDAR_EVENTS_INSTANCES` | Get recurring event instances |
+
+**❌ DISABLE (Write operations - not needed):**
+- `GOOGLECALENDAR_CREATE_*` (events, calendars, etc.)
+- `GOOGLECALENDAR_UPDATE_*`
+- `GOOGLECALENDAR_DELETE_*`
+- `GOOGLECALENDAR_QUICK_ADD_*`
+- `GOOGLECALENDAR_MOVE_*`
+- `GOOGLECALENDAR_PATCH_*`
+
+---
+
+## Summary: Minimum Tools by App
+
+| App | Required Tools | Count |
+|-----|----------------|-------|
+| **Slack** | `FETCH_CONVERSATION_HISTORY`, `FETCH_MESSAGE_THREAD_FROM_A_CONVERSATION`, `RETRIEVE_MESSAGE_PERMALINK_URL` | 3 |
+| **Monday** | `LIST_BOARDS`, `LIST_GROUPS`, `LIST_BOARD_ITEMS`, `LIST_ITEMS` | 4 |
+| **Gmail** | `FETCH_EMAILS` | 1 |
+| **Calendar** | `EVENTS_LIST`, `FIND_EVENT`, `LIST_CALENDARS` | 3 |
+
+**Total minimum: 11 tools** (out of ~300+ available across all apps)
+
+This keeps the agent focused on READ-ONLY operations and prevents accidental writes to your Slack, Monday, Gmail, or Calendar.
