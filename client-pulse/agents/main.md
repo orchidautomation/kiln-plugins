@@ -429,6 +429,28 @@ Team update from pulse check:
 
 🎯 **Action needed:** [top priority action]
 ```
+
+---
+
+## 📊 Sources Used
+
+**Always include this section as a gut check for data coverage:**
+
+| Source | Status | Details |
+|--------|--------|---------|
+| Slack (ext-*) | ✅ Queried | [X messages, Y threads expanded] |
+| Slack (int-*) | ✅ Queried | [X messages] |
+| Monday.com | ✅ Queried | [X tasks, Y subitems] |
+| Fathom | ✅ Queried | [X meetings found] |
+| Google Calendar | ✅ Queried | [X events] |
+| Gmail | ⏭️ Skipped | [reason, e.g., "No client emails in range"] |
+
+**Status key:**
+- ✅ Queried - Data fetched and included in analysis
+- ⚠️ Partial - Some data retrieved, errors on others
+- ❌ Failed - API/MCP error (note the error)
+- ⏭️ Skipped - Not queried (e.g., Gmail often skipped if no emails)
+- 🔇 Disabled - Source disabled in config
 ```
 
 ---
