@@ -458,11 +458,15 @@ Team update from pulse check:
 
 ## Tools You Have Access To
 
-**Bash:** For Fathom API calls (curl, jq)
+**CRITICAL: Use full MCP tool names. DO NOT use curl/bash for Slack, Gmail, or Calendar - use MCP tools only.**
 
-**Rube MCP:** For Slack, Gmail, Calendar
-- `RUBE_SEARCH_TOOLS` - **ALWAYS call first** to get session_id
-- `RUBE_MULTI_EXECUTE_TOOL` - Execute tools (pass session_id!)
+**Bash:** ONLY for Fathom API calls (no Fathom MCP exists)
+
+**Rube MCP (for Slack, Gmail, Calendar) - USE THESE EXACT NAMES:**
+- `mcp__plugin_client_pulse_rube_kiln__RUBE_SEARCH_TOOLS` - **ALWAYS call first** to get session_id
+- `mcp__plugin_client_pulse_rube_kiln__RUBE_MULTI_EXECUTE_TOOL` - Execute Slack/Gmail/Calendar tools
+
+**Inside RUBE_MULTI_EXECUTE_TOOL, use these tool_slugs:**
 - `SLACK_FETCH_CONVERSATION_HISTORY` - Get channel messages
 - `SLACK_FETCH_CONVERSATION_REPLIES` - Get thread replies (CRITICAL!)
 - `SLACK_RETRIEVE_MESSAGE_PERMALINK_URL` - Get permalinks for open items
@@ -471,10 +475,10 @@ Team update from pulse check:
 
 **CRITICAL: Rube Session Management**
 ```
-1. Call RUBE_SEARCH_TOOLS first with query for Slack tools
+1. Call mcp__plugin_client_pulse_rube_kiln__RUBE_SEARCH_TOOLS first
 2. Extract session_id from response
-3. Pass session_id to ALL subsequent RUBE_MULTI_EXECUTE_TOOL calls
-4. Never call RUBE tools without a valid session_id
+3. Pass session_id to ALL subsequent mcp__plugin_client_pulse_rube_kiln__RUBE_MULTI_EXECUTE_TOOL calls
+4. Never use curl for Slack/Gmail/Calendar - always use MCP
 ```
 
 **Monday MCP (DIRECT - no session needed):**
@@ -487,10 +491,34 @@ Team update from pulse check:
 
 ## Slack Analysis Workflow (Step-by-Step)
 
-1. **Get session:** `RUBE_SEARCH_TOOLS({queries: [{use_case: "fetch slack conversation history and replies"}], session: {generate_id: true}})`
-2. **Fetch channel history:** `SLACK_FETCH_CONVERSATION_HISTORY(channel_id, limit)`
-3. **For each message with reply_count > 0:** `SLACK_FETCH_CONVERSATION_REPLIES(channel, thread_ts)`
-4. **For each OPEN item:** `SLACK_RETRIEVE_MESSAGE_PERMALINK_URL(channel, message_ts)`
+1. **Get session:**
+   ```
+   mcp__plugin_client_pulse_rube_kiln__RUBE_SEARCH_TOOLS({
+     queries: [{use_case: "fetch slack conversation history and replies"}],
+     session: {generate_id: true}
+   })
+   ```
+2. **Fetch channel history:**
+   ```
+   mcp__plugin_client_pulse_rube_kiln__RUBE_MULTI_EXECUTE_TOOL({
+     tools: [{tool_slug: "SLACK_FETCH_CONVERSATION_HISTORY", arguments: {channel: "C...", limit: 200}}],
+     session_id: "[from step 1]"
+   })
+   ```
+3. **For each message with reply_count > 0:**
+   ```
+   mcp__plugin_client_pulse_rube_kiln__RUBE_MULTI_EXECUTE_TOOL({
+     tools: [{tool_slug: "SLACK_FETCH_CONVERSATION_REPLIES", arguments: {channel: "C...", ts: "..."}}],
+     session_id: "[same session]"
+   })
+   ```
+4. **For each OPEN item, get permalink:**
+   ```
+   mcp__plugin_client_pulse_rube_kiln__RUBE_MULTI_EXECUTE_TOOL({
+     tools: [{tool_slug: "SLACK_RETRIEVE_MESSAGE_PERMALINK_URL", arguments: {channel: "C...", message_ts: "..."}}],
+     session_id: "[same session]"
+   })
+   ```
 5. **Include permalinks in report** - Every open item must have a clickable link
 
 ---
