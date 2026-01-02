@@ -470,14 +470,27 @@ Only include Quick Copy if there are open items. Skip if all clear.
 Monday tools are available directly via `mcp__plugin_client_pulse_monday__*`:
 
 ```
-# List items from a board
-mcp__plugin_client_pulse_monday__list_items_on_board({board_id: [from config]})
+# Search items in a board (primary method for pulse check)
+mcp__plugin_client_pulse_monday__search_items({
+  board_id: "[from config.clients.[client].monday.board_id]",
+  group_title: "Active",  # or use group_id if known
+  limit: 50
+})
 
-# Get item details
-mcp__plugin_client_pulse_monday__get_item({item_id: [item id]})
+# Get subitems for each task
+mcp__plugin_client_pulse_monday__get_subitems({
+  item_id: "[task_id]"
+})
 
-# List subitems
-mcp__plugin_client_pulse_monday__list_subitems({parent_item_id: [item id]})
+# Get item details (if needed)
+mcp__plugin_client_pulse_monday__get_item({
+  item_id: "[item_id]"
+})
+
+# Get comments/updates on an item
+mcp__plugin_client_pulse_monday__get_updates({
+  item_id: "[item_id]"
+})
 ```
 
 **Note:** Monday tools use Gumloop MCP, NOT Rube. Call them directly without RUBE_SEARCH_TOOLS.
@@ -521,11 +534,20 @@ Check task due dates against `config.clients.[client].monday.overdue_threshold_d
 
 Call these directly without RUBE_SEARCH_TOOLS:
 
-- `mcp__plugin_client_pulse_monday__list_items_on_board` - Get items from a board
-- `mcp__plugin_client_pulse_monday__get_item` - Get item details
-- `mcp__plugin_client_pulse_monday__list_subitems` - Get subitems for a parent item
-- `mcp__plugin_client_pulse_monday__list_boards` - List all boards
-- `mcp__plugin_client_pulse_monday__list_groups` - List groups in a board
+**Read Operations:**
+- `mcp__plugin_client_pulse_monday__get_boards` - List all boards
+- `mcp__plugin_client_pulse_monday__get_board` - Get board by ID
+- `mcp__plugin_client_pulse_monday__search_items` - Search/filter items in a board
+- `mcp__plugin_client_pulse_monday__get_item` - Get item by ID
+- `mcp__plugin_client_pulse_monday__get_subitems` - Get subitems of an item
+- `mcp__plugin_client_pulse_monday__get_group` - Get group in a board
+- `mcp__plugin_client_pulse_monday__get_updates` - Get comments on an item
+
+**Write Operations:**
+- `mcp__plugin_client_pulse_monday__create_item` - Create new item
+- `mcp__plugin_client_pulse_monday__create_subitem` - Create subitem
+- `mcp__plugin_client_pulse_monday__change_column_value` - Update column value
+- `mcp__plugin_client_pulse_monday__create_update` - Add comment to item
 
 ### Bash (Fathom API)
 
