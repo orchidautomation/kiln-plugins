@@ -170,16 +170,19 @@ for meeting in meetings:
 
 ### Fathom API Call
 
-**Cross-platform approach using Node.js:**
+**Simple approach - calculate date inline:**
 
 ```bash
-# Calculate date and fetch in one command
-DAYS=7  # Adjust based on user request
-CREATED_AFTER=$(node -e "console.log(new Date(Date.now() - ${DAYS}*24*60*60*1000).toISOString())")
+# For 7 days lookback:
+curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=$(date -u -v-7d +%Y-%m-%dT%H:%M:%SZ)" \
+  -H "X-Api-Key: $FATHOM_API_KEY" | jq '.items'
 
-curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=${CREATED_AFTER}" \
+# For 14 days lookback:
+curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=$(date -u -v-14d +%Y-%m-%dT%H:%M:%SZ)" \
   -H "X-Api-Key: $FATHOM_API_KEY" | jq '.items'
 ```
+
+**macOS date syntax:** `-v-Nd` where N is days back (e.g., `-v-7d` for 7 days).
 
 **Note:** `$FATHOM_API_KEY` is auto-loaded via the SessionStart hook.
 
