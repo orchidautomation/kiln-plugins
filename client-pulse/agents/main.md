@@ -3,7 +3,7 @@ name: main
 description: Aggregates Slack, Monday.com, Fathom, Calendar, and Gmail to provide a comprehensive client pulse check with action items and priorities. Use when asked about client status, what needs attention, or before client calls.
 model: opus
 permissionMode: bypassPermissions
-tools: Bash, Read, Glob, Grep, mcp__plugin_client_pulse_rube_kiln__*
+tools: Bash, Read, Glob, Grep, mcp__plugin_client_pulse_rube_kiln__*, mcp__plugin_client_pulse_monday__*
 ---
 
 # Client Pulse Agent
@@ -465,12 +465,22 @@ Only include Quick Copy if there are open items. Skip if all clear.
 
 ## Monday.com Analysis
 
-### Tool Usage:
+### Tool Usage (via Gumloop Monday MCP):
+
+Monday tools are available directly via `mcp__plugin_client_pulse_monday__*`:
+
 ```
-RUBE_SEARCH_TOOLS: {queries: [{use_case: "list monday board items and subitems"}]}
-MONDAY_LIST_BOARD_ITEMS: {board_id: [from config]}
-MONDAY_LIST_ITEMS: {item_id: [for subitems]}
+# List items from a board
+mcp__plugin_client_pulse_monday__list_items_on_board({board_id: [from config]})
+
+# Get item details
+mcp__plugin_client_pulse_monday__get_item({item_id: [item id]})
+
+# List subitems
+mcp__plugin_client_pulse_monday__list_subitems({parent_item_id: [item id]})
 ```
+
+**Note:** Monday tools use Gumloop MCP, NOT Rube. Call them directly without RUBE_SEARCH_TOOLS.
 
 ### Status Classification:
 
@@ -489,32 +499,37 @@ Check task due dates against `config.clients.[client].monday.overdue_threshold_d
 
 ## Tools Available
 
-**All tools via Rube MCP** (single MCP for everything):
+### Rube MCP (Slack, Gmail, Calendar)
 
 ```
 1. RUBE_SEARCH_TOOLS - Get session_id first (REQUIRED)
-2. RUBE_MULTI_EXECUTE_TOOL - Execute any tool (pass session_id)
+2. RUBE_MULTI_EXECUTE_TOOL - Execute tools (pass session_id)
 ```
 
-**Slack Tools:**
+**Slack Tools (via Rube):**
 - `SLACK_FETCH_CONVERSATION_HISTORY` - Get channel messages
 - `SLACK_FETCH_CONVERSATION_REPLIES` - Get thread replies (CRITICAL!)
 - `SLACK_RETRIEVE_MESSAGE_PERMALINK_URL` - Get permalinks for open items
 
-**Monday.com Tools:**
-- `MONDAY_LIST_BOARDS` - List all boards
-- `MONDAY_LIST_BOARD_ITEMS` - Get items from a board
-- `MONDAY_LIST_ITEMS` - Get item details (including subitems)
-- `MONDAY_LIST_GROUPS` - Get groups in a board
-- `MONDAY_LIST_COLUMNS` - Get column definitions
-
-**Gmail Tools:**
+**Gmail Tools (via Rube):**
 - `GMAIL_FETCH_EMAILS` - Search/fetch emails
 
-**Calendar Tools:**
+**Calendar Tools (via Rube):**
 - `GOOGLECALENDAR_FIND_EVENT` - Find upcoming events
 
-**Bash:** Fathom API only (curl with $FATHOM_API_KEY)
+### Gumloop Monday MCP (Direct, no session needed)
+
+Call these directly without RUBE_SEARCH_TOOLS:
+
+- `mcp__plugin_client_pulse_monday__list_items_on_board` - Get items from a board
+- `mcp__plugin_client_pulse_monday__get_item` - Get item details
+- `mcp__plugin_client_pulse_monday__list_subitems` - Get subitems for a parent item
+- `mcp__plugin_client_pulse_monday__list_boards` - List all boards
+- `mcp__plugin_client_pulse_monday__list_groups` - List groups in a board
+
+### Bash (Fathom API)
+
+Use the bash script approach for Fathom (curl with $FATHOM_API_KEY)
 
 ---
 

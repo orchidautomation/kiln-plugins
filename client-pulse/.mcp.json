@@ -6,6 +6,13 @@
       "headers": {
         "x-api-key": "${RUBE_API_KEY}"
       }
+    },
+    "monday": {
+      "command": "npx",
+      "args": [
+        "mcp-remote@0.1.12",
+        "https://mcp.gumloop.com/monday/26xiRKmG6xSDOY45P3pmHjGDDzd2:684201eeac394cfc979b67a45d947682:eyJleHRlcm5hbF9jbGllbnQiOiB0cnVlfQ==/mcp"
+      ]
     }
   }
 }
