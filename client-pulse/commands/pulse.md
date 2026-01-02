@@ -12,55 +12,37 @@ Launch the `client-pulse` subagent to generate comprehensive client pulse report
 
 ---
 
-## Step 1: Read Configuration (CRITICAL - Do This First)
+## Step 1: Read Configuration (Silently)
 
-**The config is pre-loaded via hook - look for `<client-pulse-config>` tags in context.**
+**The config is pre-loaded via SessionStart hook - look for `<client-pulse-config>` tags in the conversation context.**
 
-If pre-loaded config exists:
-```
-1. Parse the YAML content from <client-pulse-config> tags
-2. Extract:
-   - All client keys: Object.keys(config.clients)
-   - Client display names and emojis for reporting
-   - Default lookback days: config.behavior.default_lookback_days
-```
+**DO NOT narrate config loading. DO NOT list what you found. Just parse silently and proceed.**
 
-If NO pre-loaded config (fallback):
-```
-1. Use Glob to find: **/client-pulse/config.yaml
-2. Read the file
-3. Parse YAML as above
-```
+If pre-loaded config exists in context:
+- Parse the YAML content from `<client-pulse-config>` tags
+- Extract client keys, display names, emojis, default lookback days
+- Proceed directly to Step 2
 
-This ensures the command adapts to whatever clients the user has configured.
+If NO pre-loaded config (fallback only):
+- Glob for `**/client-pulse/config.yaml`, Read it, parse YAML
+- Still don't narrate - just proceed to validation
 
 ---
 
-## Step 2: Validate Arguments
+## Step 2: Validate Arguments (Silently)
 
-**Argument validation before proceeding:**
+**Parse and validate silently - only speak if there's an error.**
 
+Parse from $ARGUMENTS:
+- args[0] = client filter (default: "all")
+- args[1] = days (default from config, usually 7)
+- args[2] = notes (optional)
+
+**If valid:** Proceed silently to Step 3. Don't list what you validated.
+
+**If invalid client:** Show error and stop:
 ```
-Parse arguments from $ARGUMENTS:
-  args[0] = client filter (default: "all")
-  args[1] = days (default: config.behavior.default_lookback_days or 7)
-  args[2] = notes (optional)
-
-Validation:
-  - days: Must be 1-365. If invalid, use default.
-  - client: Must exist in config.clients OR be "all"
-
-If client not found:
-  "Unknown client '[args[0]]'.
-   Available clients: [list all keys from config.clients]
-
-   Usage: /client-pulse [client] [days]
-   Examples:
-     /client-pulse              - All clients
-     /client-pulse sendoso      - Sendoso only
-     /client-pulse profound 14  - Last 14 days"
-
-  STOP - do not launch subagents.
+Unknown client '[name]'. Available: [list from config]
 ```
 
 ---
