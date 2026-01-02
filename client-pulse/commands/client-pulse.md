@@ -69,7 +69,7 @@ The number of subagents depends on how many clients are in the user's config.
 **Example: User has 3 clients (sendoso, profound, windsurf)**
 ```
 Task tool #1:
-  subagent_type: "client-pulse"
+  subagent_type: "client-pulse:client-pulse"
   description: "sendoso pulse check"
   prompt: |
     Generate a client pulse report for **sendoso only**.
@@ -80,7 +80,7 @@ Task tool #1:
     Focus ONLY on data sources for client "sendoso".
 
 Task tool #2:
-  subagent_type: "client-pulse"
+  subagent_type: "client-pulse:client-pulse"
   description: "profound pulse check"
   prompt: |
     Generate a client pulse report for **profound only**.
@@ -91,7 +91,7 @@ Task tool #2:
     Focus ONLY on data sources for client "profound".
 
 Task tool #3:
-  subagent_type: "client-pulse"
+  subagent_type: "client-pulse:client-pulse"
   description: "windsurf pulse check"
   prompt: |
     Generate a client pulse report for **windsurf only**.
@@ -110,7 +110,7 @@ The command adapts to whatever clients are in the user's `config.yaml`.
 **Template for each client:**
 ```
 Task tool:
-  subagent_type: "client-pulse"
+  subagent_type: "client-pulse:client-pulse"
   description: "[client_key] pulse check"
   prompt: |
     Generate a client pulse report for **[client_key] only**.
@@ -129,7 +129,7 @@ Task tool:
 
 ```
 Task tool:
-  subagent_type: "client-pulse"
+  subagent_type: "client-pulse:client-pulse"
   description: "[client_key] pulse check"
   prompt: |
     Generate a client pulse report for **[client_key] only**.
