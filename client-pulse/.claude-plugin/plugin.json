@@ -12,6 +12,5 @@
   "keywords": ["client-management", "slack", "monday", "fathom", "gtm", "sales"],
   "commands": "./commands/",
   "agents": "./agents/main.md",
-  "hooks": "./hooks/hooks.json",
   "mcpServers": "./.mcp.json"
 }
