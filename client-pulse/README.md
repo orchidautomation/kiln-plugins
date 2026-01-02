@@ -65,17 +65,20 @@ FATHOM_API_KEY=your_fathom_api_key_here
 
 ### Step 3: Create Your Configuration
 
+**Option A: Interactive Setup (Recommended)**
+```bash
+/setup
+```
+The setup wizard will:
+- Fetch your Slack channels and Monday boards automatically
+- Guide you through adding each client
+- Generate your `config.yaml`
+
+**Option B: Manual Setup**
 ```bash
 cp config.example.yaml config.yaml
 ```
-
-Edit `config.yaml` with your information:
-- Your name, email, Slack ID
-- Your clients and their details
-- Slack channel IDs
-- Monday.com board IDs
-
-See [Configuration Guide](#configuration-guide) below for details.
+Edit `config.yaml` with your information. See [Configuration Guide](#configuration-guide) below.
 
 ### Step 4: First Run - OAuth Setup
 
