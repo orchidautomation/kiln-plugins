@@ -3,7 +3,7 @@ name: main
 description: Aggregates Slack, Monday.com, Fathom, Calendar, and Gmail to provide a comprehensive client pulse check with action items and priorities. Use when asked about client status, what needs attention, or before client calls.
 model: opus
 permissionMode: bypassPermissions
-tools: Bash, Read, Glob, Grep, mcp__rube-kiln__*
+tools: Bash, Read, Glob, Grep, mcp__plugin_client_pulse_rube_kiln__*
 ---
 
 # Client Pulse Agent
@@ -170,21 +170,52 @@ for meeting in meetings:
 
 ### Fathom API Call
 
-**Simple approach - calculate date inline:**
+**IMPORTANT:** Use a bash script to avoid zsh parsing errors and ensure .env is sourced:
 
 ```bash
-# For 7 days lookback:
-curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=$(date -u -v-7d +%Y-%m-%dT%H:%M:%SZ)" \
-  -H "X-Api-Key: $FATHOM_API_KEY" | jq '.items'
+# Write a bash script to avoid zsh compatibility issues
+cat > /tmp/fathom_fetch.sh << 'SCRIPT'
+#!/bin/bash
 
-# For 14 days lookback:
-curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=$(date -u -v-14d +%Y-%m-%dT%H:%M:%SZ)" \
-  -H "X-Api-Key: $FATHOM_API_KEY" | jq '.items'
+# Find and source .env from plugin directory
+PLUGIN_DIR="${CLAUDE_PLUGIN_ROOT:-$(dirname "$0")}"
+for dir in "$PLUGIN_DIR" "$HOME/kiln-plugins/client-pulse" "$HOME/Documents/kiln-plugins/client-pulse"; do
+  if [ -f "$dir/.env" ]; then
+    source "$dir/.env" 2>/dev/null
+    break
+  fi
+done
+
+DAYS_AGO="${1:-7}"
+CREATED_AFTER=$(date -v-${DAYS_AGO}d -u +"%Y-%m-%dT00:00:00Z")
+
+curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=$CREATED_AFTER" \
+  -H "X-Api-Key: $FATHOM_API_KEY"
+SCRIPT
+chmod +x /tmp/fathom_fetch.sh
+/bin/bash /tmp/fathom_fetch.sh 7  # Pass days as first argument
 ```
 
-**macOS date syntax:** `-v-Nd` where N is days back (e.g., `-v-7d` for 7 days).
+**Why the script approach:** Claude Code's shell runs in zsh, which doesn't parse `$(date -v-${DAYS_AGO}d ...)` correctly. The heredoc with `/bin/bash` shebang ensures proper bash execution and sources .env.
 
-**Note:** `$FATHOM_API_KEY` is auto-loaded via the SessionStart hook.
+**To analyze the JSON output:**
+```bash
+# Get meetings and filter by client
+/bin/bash /tmp/fathom_fetch.sh 14 | jq '.items'
+
+# Filter to external meetings only
+/bin/bash /tmp/fathom_fetch.sh 14 | jq '[.items[] | select(.calendar_invitees_domains_type == "one_or_more_external")]'
+
+# Filter to internal meetings with client keyword
+/bin/bash /tmp/fathom_fetch.sh 14 | jq '[.items[] | select(.calendar_invitees_domains_type == "only_internal") | select(.summary | test("Sendoso"; "i"))]'
+```
+
+**Extract from each meeting:**
+1. `title`, `meeting_title` - Meeting name
+2. `calendar_invitees` - Attendees (check `email_domain` and `is_external`)
+3. `summary` - AI-generated summary
+4. `action_items` - List of action items with assignees
+5. `transcript` - Full transcript (search for client keywords)
 
 ---
 
