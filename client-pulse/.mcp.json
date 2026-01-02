@@ -7,7 +7,7 @@
         "x-api-key": "${RUBE_API_KEY}"
       }
     },
-    "monday": {
+    "gumloop-monday": {
       "command": "npx",
       "args": [
         "mcp-remote@0.1.12",

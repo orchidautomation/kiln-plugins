@@ -102,7 +102,7 @@ All client data is in `config.yaml`:
 
 **⚠️ DO NOT use Rube for Monday.com!** Use Gumloop Monday MCP directly.
 
-#### mcp__plugin_client_pulse_monday__search_items
+#### mcp__plugin_client_pulse_gumloop_monday__search_items
 ```json
 {
   "board_id": "1234567890",    // Required: Board ID (number as string)
@@ -110,28 +110,28 @@ All client data is in `config.yaml`:
 }
 ```
 
-#### mcp__plugin_client_pulse_monday__get_subitems
+#### mcp__plugin_client_pulse_gumloop_monday__get_subitems
 ```json
 {
   "item_id": "1234567890"      // Required: Item ID
 }
 ```
 
-#### mcp__plugin_client_pulse_monday__get_item
+#### mcp__plugin_client_pulse_gumloop_monday__get_item
 ```json
 {
   "item_id": "1234567890"      // Required: Item ID
 }
 ```
 
-#### mcp__plugin_client_pulse_monday__get_updates
+#### mcp__plugin_client_pulse_gumloop_monday__get_updates
 ```json
 {
   "item_id": "1234567890"      // Required: Item ID for comments
 }
 ```
 
-#### mcp__plugin_client_pulse_monday__create_item
+#### mcp__plugin_client_pulse_gumloop_monday__create_item
 ```json
 {
   "board_id": "1234567890",    // Required: Board ID

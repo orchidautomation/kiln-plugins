@@ -3,7 +3,7 @@ name: main
 description: Aggregates data from Fathom calls, Slack channels, Monday.com, Google Calendar, and Gmail to provide a comprehensive pulse check across all clients. Identifies action items, follow-ups, and priorities.
 model: opus
 permissionMode: bypassPermissions
-tools: Bash, Read, Glob, Grep, mcp__plugin_client_pulse_rube_kiln__*, mcp__plugin_client_pulse_monday__*
+tools: Bash, Read, Glob, Grep, mcp__plugin_client_pulse_rube_kiln__*, mcp__plugin_client_pulse_gumloop_monday__*
 ---
 
 # Client Pulse Check Agent
@@ -199,26 +199,26 @@ Look up team member Slack IDs from config for accurate attribution.
 **Get board ID from config:** `config.clients.[client].monday.board_id`
 
 **For the client's board:**
-1. Use `mcp__plugin_client_pulse_monday__search_items` with `limit: 50`
-2. For each task, fetch subtasks with `mcp__plugin_client_pulse_monday__get_subitems`
+1. Use `mcp__plugin_client_pulse_gumloop_monday__search_items` with `limit: 50`
+2. For each task, fetch subtasks with `mcp__plugin_client_pulse_gumloop_monday__get_subitems`
 3. Note any overdue tasks or approaching deadlines
 4. Identify blocked items (status: "Stuck")
 
 **Monday Tool Reference:**
 ```
 # Search items in a board
-mcp__plugin_client_pulse_monday__search_items({
+mcp__plugin_client_pulse_gumloop_monday__search_items({
   board_id: "[from config.clients.[client].monday.board_id]",
   limit: 50
 })
 
 # Get subitems for a task
-mcp__plugin_client_pulse_monday__get_subitems({
+mcp__plugin_client_pulse_gumloop_monday__get_subitems({
   item_id: "[task_id]"
 })
 
 # Get item details
-mcp__plugin_client_pulse_monday__get_item({
+mcp__plugin_client_pulse_gumloop_monday__get_item({
   item_id: "[item_id]"
 })
 ```
@@ -471,10 +471,10 @@ Team update from pulse check:
 ```
 
 **Monday MCP (DIRECT - no session needed):**
-- `mcp__plugin_client_pulse_monday__search_items` - Search tasks
-- `mcp__plugin_client_pulse_monday__get_subitems` - Get subtasks
-- `mcp__plugin_client_pulse_monday__get_item` - Get task details
-- `mcp__plugin_client_pulse_monday__get_updates` - Get comments
+- `mcp__plugin_client_pulse_gumloop_monday__search_items` - Search tasks
+- `mcp__plugin_client_pulse_gumloop_monday__get_subitems` - Get subtasks
+- `mcp__plugin_client_pulse_gumloop_monday__get_item` - Get task details
+- `mcp__plugin_client_pulse_gumloop_monday__get_updates` - Get comments
 
 ---
 
