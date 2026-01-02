@@ -170,33 +170,35 @@ for meeting in meetings:
 
 ### Fathom API Call
 
-**IMPORTANT:** Use a bash script to avoid zsh parsing errors and ensure .env is sourced:
+**⚠️ CRITICAL: Subagents don't inherit env vars from parent session!**
+
+You MUST use this exact bash script approach. DO NOT try inline commands - they will fail with zsh parse errors.
 
 ```bash
-# Write a bash script to avoid zsh compatibility issues
+# STEP 1: Create the fetch script (run this FIRST, exactly as shown)
 cat > /tmp/fathom_fetch.sh << 'SCRIPT'
 #!/bin/bash
-
-# Find and source .env from plugin directory
-PLUGIN_DIR="${CLAUDE_PLUGIN_ROOT:-$(dirname "$0")}"
-for dir in "$PLUGIN_DIR" "$HOME/kiln-plugins/client-pulse" "$HOME/Documents/kiln-plugins/client-pulse"; do
-  if [ -f "$dir/.env" ]; then
-    source "$dir/.env" 2>/dev/null
-    break
-  fi
-done
-
+source "$HOME/Documents/kiln-plugins/client-pulse/.env" 2>/dev/null
 DAYS_AGO="${1:-7}"
 CREATED_AFTER=$(date -v-${DAYS_AGO}d -u +"%Y-%m-%dT00:00:00Z")
-
 curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=$CREATED_AFTER" \
   -H "X-Api-Key: $FATHOM_API_KEY"
 SCRIPT
 chmod +x /tmp/fathom_fetch.sh
-/bin/bash /tmp/fathom_fetch.sh 7  # Pass days as first argument
 ```
 
-**Why the script approach:** Claude Code's shell runs in zsh, which doesn't parse `$(date -v-${DAYS_AGO}d ...)` correctly. The heredoc with `/bin/bash` shebang ensures proper bash execution and sources .env.
+```bash
+# STEP 2: Execute the script with days parameter
+/bin/bash /tmp/fathom_fetch.sh 10 | jq '.items'
+```
+
+**⛔ DO NOT DO THIS** (will fail in zsh):
+```bash
+# WRONG - this causes "parse error near '('"
+CREATED_AFTER=$(node -e "...") && curl ...
+```
+
+**Why:** Claude Code runs zsh which can't parse `$(date -v-${N}d ...)`. The heredoc script runs in bash.
 
 **To analyze the JSON output:**
 ```bash
