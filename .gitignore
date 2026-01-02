@@ -17,5 +17,9 @@ Thumbs.db
 # Node modules (if any)
 node_modules/
 
-# Claude Code local cache
-.claude/
+# Claude Code local cache (root level only)
+/.claude/
+
+# But DO include plugin settings (for team sharing)
+!client-pulse/.claude/
+!client-pulse/.claude/settings.json

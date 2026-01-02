@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Bash(/bin/bash*)",
+      "Bash(cat*)",
+      "Bash(chmod*)",
+      "Bash(curl*)",
+      "Bash(jq*)",
+      "Bash(source*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "WebFetch(*)",
+      "Task(*)",
+      "mcp__plugin_client_pulse_rube_kiln__*",
+      "mcp__plugin_client_pulse_gumloop_monday__*"
+    ]
+  }
+}
