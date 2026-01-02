@@ -2,10 +2,7 @@
   "mcpServers": {
     "rube-kiln": {
       "type": "http",
-      "url": "https://rube.app/mcp",
-      "headers": {
-        "x-api-key": "${RUBE_API_KEY}"
-      }
+      "url": "https://mcp.rube.sh/mcp"
     },
     "gumloop-monday": {
       "command": "npx",

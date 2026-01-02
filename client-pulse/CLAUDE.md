@@ -252,13 +252,16 @@ GET https://api.fathom.ai/external/v1/meetings
 
 ### Bash Script Approach (Required for Subagents)
 
-**CRITICAL:** Subagents don't inherit env vars, and zsh can't parse `$(date ...)` in some contexts. Always use this script:
+**CRITICAL:** Subagents don't inherit env vars, and zsh can't parse `$(date ...)` in some contexts.
+
+**Step 1:** Use Glob to find the plugin's .env: `**/client-pulse/.env`
+
+**Step 2:** Run with discovered path (replace `[ENV_PATH]`):
 
 ```bash
-# Create and run the fetch script
 cat > /tmp/fathom_fetch.sh << 'SCRIPT'
 #!/bin/bash
-source "$HOME/Documents/kiln-plugins/client-pulse/.env" 2>/dev/null
+source "[ENV_PATH]" 2>/dev/null
 DAYS_AGO="${1:-7}"
 CREATED_AFTER=$(date -v-${DAYS_AGO}d -u +"%Y-%m-%dT00:00:00Z")
 curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=$CREATED_AFTER" \

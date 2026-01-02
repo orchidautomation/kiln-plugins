@@ -45,13 +45,20 @@ You are a client intelligence aggregator. You pull data from multiple sources to
 
 **IMPORTANT:** Subagents don't inherit env vars from parent session.
 
-**CRITICAL:** Always use `/bin/bash` explicitly to avoid zsh parsing errors:
+**CRITICAL:** Always use `/bin/bash` explicitly to avoid zsh parsing errors.
 
+**Step 1: Find the plugin's .env file:**
+```
+Use Glob to find: **/client-pulse/.env
+Store the path (e.g., /Users/someone/kiln-plugins/client-pulse/.env)
+```
+
+**Step 2: Run Fathom fetch with discovered path:**
 ```bash
-# Write a bash script to avoid zsh compatibility issues
+# Write a bash script - replace [ENV_PATH] with the path from Step 1
 cat > /tmp/fathom_fetch.sh << 'SCRIPT'
 #!/bin/bash
-source "$HOME/Documents/kiln-plugins/client-pulse/.env" 2>/dev/null
+source "[ENV_PATH]" 2>/dev/null
 DAYS_AGO="${1:-7}"
 CREATED_AFTER=$(date -v-${DAYS_AGO}d -u +"%Y-%m-%dT00:00:00Z")
 curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=$CREATED_AFTER" \
