@@ -74,46 +74,53 @@ From the prompt, extract:
 
 ### Step 3: Fetch Data
 
-Execute in priority order. Be thorough - fetch everything within the date range.
+**⚠️ TOOL ROUTING - Use the right MCP for each source:**
+
+| Source | MCP to Use | Tool Pattern |
+|--------|------------|--------------|
+| Slack | **Rube** (via RUBE_MULTI_EXECUTE_TOOL) | SLACK_FETCH_* |
+| Monday.com | **Gumloop** (DIRECT, no session) | mcp__plugin_client_pulse_monday__* |
+| Fathom | **Bash script** (sources .env) | /bin/bash /tmp/fathom_fetch.sh |
+| Calendar | **Rube** (via RUBE_MULTI_EXECUTE_TOOL) | GOOGLECALENDAR_* |
+| Gmail | **Rube** (via RUBE_MULTI_EXECUTE_TOOL) | GMAIL_* |
+
+**Priority order:**
 
 ```
-1. SLACK EXT-* CHANNEL (CRITICAL - Priority 1)
+1. SLACK EXT-* CHANNEL (CRITICAL - Priority 1) → Use RUBE
    ├── Channel ID: config.clients.[client].slack.external.id
    ├── Limit: config.data_sources.slack.external_channel_limit
    ├── Expand EVERY thread within the date range
    └── Track: questions, requests, commitments, sentiment
 
-2. MONDAY.COM (Priority 2)
-   ├── Board ID: config.clients.[client].monday.board_id
-   ├── Group: config.data_sources.monday.active_group_id
-   ├── Limit: config.data_sources.monday.task_limit
+2. MONDAY.COM (Priority 2) → Use GUMLOOP DIRECT (NOT RUBE!)
+   ├── mcp__plugin_client_pulse_monday__search_items({board_id: "...", limit: 50})
+   ├── mcp__plugin_client_pulse_monday__get_subitems({item_id: "..."})
    └── Get subitems for each task
 
-3. FATHOM (Priority 3)
-   ├── Fetch all meetings for the date range
-   ├── Filter by client using two-tier logic (see below)
-   └── Extract action items and summaries
+3. FATHOM (Priority 3) → Use BASH SCRIPT (NOT inline commands!)
+   ├── Create script: cat > /tmp/fathom_fetch.sh << 'SCRIPT' ...
+   ├── Execute: /bin/bash /tmp/fathom_fetch.sh [days]
+   └── Filter by client using two-tier logic
 
-4. GOOGLE CALENDAR (Priority 4)
+4. GOOGLE CALENDAR (Priority 4) → Use RUBE
    ├── Lookahead: config.data_sources.calendar.lookahead_days
    └── Calculate days since last touchpoint
 
-5. SLACK INT-* CHANNEL (Priority 5)
+5. SLACK INT-* CHANNEL (Priority 5) → Use RUBE
    ├── Channel ID: config.clients.[client].slack.internal.id
-   ├── Limit: config.data_sources.slack.internal_channel_limit
    └── Note internal blockers/context
 
-6. GMAIL (Priority 6 - Low)
+6. GMAIL (Priority 6 - Low) → Use RUBE
    ├── Search for client domain emails
-   ├── Limit: config.data_sources.gmail.max_results
    └── Only include if emails found
 ```
 
 ---
 
-## RUBE MCP Session Management
+## RUBE MCP Session Management (Slack, Gmail, Calendar ONLY)
 
-**CRITICAL: Always establish session before tool calls.**
+**For Slack/Gmail/Calendar - establish Rube session first:**
 
 ```
 1. RUBE_SEARCH_TOOLS({
@@ -122,10 +129,12 @@ Execute in priority order. Be thorough - fetch everything within the date range.
    })
    → Extract session_id from response
 
-2. Pass session_id to ALL subsequent RUBE_MULTI_EXECUTE_TOOL calls
+2. Pass session_id to ALL RUBE_MULTI_EXECUTE_TOOL calls
 
 3. Never call RUBE tools without a valid session_id
 ```
+
+**⚠️ DO NOT use Rube for Monday.com!** Use Gumloop Monday MCP directly (no session needed).
 
 ### Slack Analysis Tool Sequence:
 1. **Get session:** `RUBE_SEARCH_TOOLS` with `session: {generate_id: true}`
