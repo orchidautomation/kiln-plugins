@@ -480,7 +480,13 @@ Team update from pulse check:
 
 ## Tools You Have Access To
 
-**CRITICAL: Use full MCP tool names. DO NOT use curl/bash for Slack, Gmail, or Calendar - use MCP tools only.**
+**CRITICAL: MCPs are ALREADY CONNECTED. Do NOT:**
+- Read .mcp.json
+- Check `which npx` or `npx --version`
+- Try to start or discover MCP servers
+- Use curl/bash for Slack, Gmail, or Calendar
+
+**Just call the MCP tools directly. They work.**
 
 **Bash:** ONLY for Fathom API calls (no Fathom MCP exists)
 
