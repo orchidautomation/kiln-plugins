@@ -98,39 +98,45 @@ All client data is in `config.yaml`:
 }
 ```
 
-### Monday.com Tools
+### Monday.com Tools (via Gumloop MCP - Direct, NO Rube session needed)
 
-#### MONDAY_LIST_BOARD_ITEMS
+**⚠️ DO NOT use Rube for Monday.com!** Use Gumloop Monday MCP directly.
+
+#### mcp__plugin_client_pulse_monday__search_items
 ```json
 {
   "board_id": "1234567890",    // Required: Board ID (number as string)
-  "limit": 100,                // Optional: Max items (default: 25)
-  "group_id": "Active"         // Optional: Filter by group
+  "limit": 50                  // Optional: Max items
 }
 ```
 
-#### MONDAY_LIST_ITEMS
+#### mcp__plugin_client_pulse_monday__get_subitems
 ```json
 {
-  "item_id": "1234567890"      // Required: Item ID (for fetching subitems)
+  "item_id": "1234567890"      // Required: Item ID
 }
 ```
 
-#### MONDAY_CREATE_ITEM
+#### mcp__plugin_client_pulse_monday__get_item
+```json
+{
+  "item_id": "1234567890"      // Required: Item ID
+}
+```
+
+#### mcp__plugin_client_pulse_monday__get_updates
+```json
+{
+  "item_id": "1234567890"      // Required: Item ID for comments
+}
+```
+
+#### mcp__plugin_client_pulse_monday__create_item
 ```json
 {
   "board_id": "1234567890",    // Required: Board ID
   "item_name": "Task title",   // Required: Item name
-  "group_id": "Active",        // Optional: Target group
-  "column_values": {}          // Optional: Column values as JSON
-}
-```
-
-#### MONDAY_CREATE_UPDATE
-```json
-{
-  "item_id": "1234567890",     // Required: Item ID
-  "body": "Comment text"       // Required: Update/comment content
+  "group_id": "Active"         // Optional: Target group
 }
 ```
 
@@ -244,13 +250,22 @@ GET https://api.fathom.ai/external/v1/meetings
 | `include_summary` | Optional | Include AI summary |
 | `include_action_items` | Optional | Include extracted action items |
 
-### Cross-Platform Date Calculation
-```bash
-DAYS=7
-CREATED_AFTER=$(node -e "console.log(new Date(Date.now() - ${DAYS}*24*60*60*1000).toISOString())")
+### Bash Script Approach (Required for Subagents)
 
-curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=${CREATED_AFTER}" \
+**CRITICAL:** Subagents don't inherit env vars, and zsh can't parse `$(date ...)` in some contexts. Always use this script:
+
+```bash
+# Create and run the fetch script
+cat > /tmp/fathom_fetch.sh << 'SCRIPT'
+#!/bin/bash
+source "$HOME/Documents/kiln-plugins/client-pulse/.env" 2>/dev/null
+DAYS_AGO="${1:-7}"
+CREATED_AFTER=$(date -v-${DAYS_AGO}d -u +"%Y-%m-%dT00:00:00Z")
+curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&include_summary=true&include_action_items=true&created_after=$CREATED_AFTER" \
   -H "X-Api-Key: $FATHOM_API_KEY"
+SCRIPT
+chmod +x /tmp/fathom_fetch.sh
+/bin/bash /tmp/fathom_fetch.sh 7 | jq  # Pass days as argument
 ```
 
 ### Response Filtering (Two-Tier)
@@ -259,7 +274,8 @@ curl -s "https://api.fathom.ai/external/v1/meetings?include_transcript=true&incl
 ```python
 if meeting['calendar_invitees_domains_type'] == 'one_or_more_external':
     attendee_domains = [inv['email_domain'] for inv in meeting['calendar_invitees'] if inv['is_external']]
-    if any(d in config['fathom']['external_domains'] for d in attendee_domains):
+    # Use config.clients.[client].domains (e.g., ["sendoso.com"])
+    if any(d in config['clients'][client]['domains'] for d in attendee_domains):
         include_meeting()
 ```
 
@@ -267,7 +283,8 @@ if meeting['calendar_invitees_domains_type'] == 'one_or_more_external':
 ```python
 if meeting['calendar_invitees_domains_type'] == 'only_internal':
     transcript = meeting.get('transcript', '') + meeting.get('summary', '')
-    if any(kw.lower() in transcript.lower() for kw in config['fathom']['internal_keywords']):
+    # Use config.clients.[client].keywords (e.g., ["Sendoso", "Hannah", "gifting"])
+    if any(kw.lower() in transcript.lower() for kw in config['clients'][client]['keywords']):
         include_meeting()
 ```
 
@@ -292,14 +309,15 @@ For each thread:
 3. Analyze full context for resolution status
 
 **Resolution signals (mark as RESOLVED):**
-- Check `config.behavior.resolution_signals.completion`
-- Check `config.behavior.resolution_signals.acknowledgment`
+- Completion words: "done", "completed", "shipped", "live", "pushed", "sent"
+- Acknowledgment: "thanks!", "perfect", "looks good", "approved", "👍"
+- Deliverable shared (link/file/screenshot provided)
 
 **Open signals (report as OPEN):**
 - Question with no response
-- Promise without confirmation (check `config.behavior.open_signals.promise_without_followup`)
+- Promise without confirmation ("will do", "on it" with no follow-up)
 - Thread ended with a question
-- Waiting signals (check `config.behavior.open_signals.waiting`)
+- Waiting signals ("still waiting", "any update?")
 
 ---
 
