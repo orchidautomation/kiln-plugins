@@ -11,7 +11,7 @@
   "license": "MIT",
   "keywords": ["client-management", "slack", "monday", "fathom", "gtm", "sales"],
   "commands": "./commands/",
-  "agents": "./agents/",
+  "agents": "./agents/client-pulse.md",
   "hooks": "./hooks/hooks.json",
   "mcpServers": "./.mcp.json"
 }
