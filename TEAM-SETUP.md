@@ -8,19 +8,16 @@ git clone https://github.com/thekiln/kiln-plugins ~/kiln-plugins
 cd ~/kiln-plugins/client-pulse
 
 # 2. Setup your personal config (before installing plugin)
-cp .env.example .env          # Add your FATHOM_API_KEY
-cp config.example.yaml config.yaml  # Add your clients
+cp .env.example .env                    # Add your FATHOM_API_KEY + RUBE_API_KEY
+cp config.example.yaml config.yaml      # Add your clients
 
-# 3. Add the MCP (one-time, global)
-claude mcp add rube-kiln --type http --url https://rube.app/mcp
-
-# 4. Install the plugin (run inside Claude Code)
+# 3. Install the plugin (run inside Claude Code)
 /plugin marketplace add ~/kiln-plugins
 /plugin install client-pulse@kiln-plugins
 
-# 5. Connect apps at https://rube.app (Slack, Monday, Gmail, Calendar)
+# 4. Connect apps at https://rube.app (Slack, Monday, Gmail, Calendar)
 
-# 6. Test it
+# 5. Test it
 /client-pulse sendoso
 ```
 
@@ -178,9 +175,10 @@ If it works, you'll see the agent fetch Slack messages, Monday tasks, and genera
 | Plugin code | ✅ Read-only | |
 | Agent prompts | ✅ Read-only | |
 | `config.example.yaml` | ✅ Template | |
+| `.mcp.json` | ✅ Uses env var | |
 | `config.yaml` | | ✅ Your clients |
-| `.env` file | | ✅ Your API keys |
-| Rube account | | ✅ Your connections |
+| `.env` file | | ✅ Your API keys (FATHOM + RUBE) |
+| Rube account | | ✅ Your app connections |
 
 **You can't break shared code.** Personal files are gitignored - they never leave your machine.
 

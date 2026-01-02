@@ -82,16 +82,28 @@ if (envFile) {
     }
   });
 
-  // Persist FATHOM_API_KEY to Claude env file if available
-  if (process.env.CLAUDE_ENV_FILE && process.env.FATHOM_API_KEY) {
-    const exportLine = process.platform === 'win32'
-      ? `set FATHOM_API_KEY=${process.env.FATHOM_API_KEY}\n`
-      : `export FATHOM_API_KEY="${process.env.FATHOM_API_KEY}"\n`;
+  // Persist API keys to Claude env file if available
+  if (process.env.CLAUDE_ENV_FILE) {
+    const keysToExport = ['FATHOM_API_KEY', 'RUBE_API_KEY'];
+    const exportedKeys = [];
 
-    fs.appendFileSync(process.env.CLAUDE_ENV_FILE, exportLine);
-    console.log(`Environment loaded from ${envDir} (FATHOM_API_KEY set)`);
+    keysToExport.forEach(key => {
+      if (process.env[key]) {
+        const exportLine = process.platform === 'win32'
+          ? `set ${key}=${process.env[key]}\n`
+          : `export ${key}="${process.env[key]}"\n`;
+        fs.appendFileSync(process.env.CLAUDE_ENV_FILE, exportLine);
+        exportedKeys.push(key);
+      }
+    });
+
+    if (exportedKeys.length > 0) {
+      console.log(`✓ Environment loaded from ${envDir} (${exportedKeys.join(', ')} set)`);
+    } else {
+      console.log(`✓ Environment loaded from ${envDir}`);
+    }
   } else if (envFile) {
-    console.log(`Environment loaded from ${envDir}`);
+    console.log(`✓ Environment loaded from ${envDir}`);
   }
 } else {
   console.log('Warning: .env not found in plugin or project directory');
