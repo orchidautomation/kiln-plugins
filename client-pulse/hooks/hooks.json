@@ -1,14 +1,22 @@
 {
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/load-env.js"
-          }
-        ]
-      }
-    ]
-  }
+  "hooks": [
+    {
+      "matcher": "SessionStart",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/load-env.js"
+        }
+      ]
+    },
+    {
+      "matcher": "/pulse",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/inject-config.js"
+        }
+      ]
+    }
+  ]
 }

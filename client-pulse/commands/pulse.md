@@ -14,15 +14,22 @@ Launch the `client-pulse` subagent to generate comprehensive client pulse report
 
 ## Step 1: Read Configuration (CRITICAL - Do This First)
 
-**Before launching any subagents, discover available clients:**
+**The config is pre-loaded via hook - look for `<client-pulse-config>` tags in context.**
 
+If pre-loaded config exists:
 ```
-1. Use Glob to find: **/client-pulse/config.yaml
-2. Read the file
-3. Parse YAML and extract:
+1. Parse the YAML content from <client-pulse-config> tags
+2. Extract:
    - All client keys: Object.keys(config.clients)
    - Client display names and emojis for reporting
    - Default lookback days: config.behavior.default_lookback_days
+```
+
+If NO pre-loaded config (fallback):
+```
+1. Use Glob to find: **/client-pulse/config.yaml
+2. Read the file
+3. Parse YAML as above
 ```
 
 This ensures the command adapts to whatever clients the user has configured.
