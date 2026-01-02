@@ -4,7 +4,7 @@
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/thekiln/kiln-plugins ~/kiln-plugins
+git clone https://github.com/orchidautomation/kiln-plugins ~/kiln-plugins
 cd ~/kiln-plugins/client-pulse
 
 # 2. Setup your personal config (before installing plugin)
@@ -40,7 +40,7 @@ Plus **Fathom API** for meeting transcripts.
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/thekiln/kiln-plugins ~/kiln-plugins
+git clone https://github.com/orchidautomation/kiln-plugins ~/kiln-plugins
 ```
 
 > **Note:** You only need **read access** to the repo. You can't accidentally break the shared plugin code - your personal config files (`config.yaml`, `.env`) stay local and are gitignored. When the plugin is updated, just run `git pull` to get the latest.
@@ -213,7 +213,7 @@ cd ~/kiln-plugins && git pull
 
 ```bash
 # 1. Clone
-git clone https://github.com/thekiln/kiln-plugins ~/kiln-plugins
+git clone https://github.com/orchidautomation/kiln-plugins ~/kiln-plugins
 
 # 2. Configure first (before installing)
 cd ~/kiln-plugins/client-pulse

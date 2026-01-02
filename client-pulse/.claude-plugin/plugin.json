@@ -7,7 +7,7 @@
     "url": "https://thekiln.com"
   },
   "homepage": "https://thekiln.com",
-  "repository": "https://github.com/thekiln/kiln-plugins",
+  "repository": "https://github.com/orchidautomation/kiln-plugins",
   "license": "MIT",
   "keywords": ["client-management", "slack", "monday", "fathom", "gtm", "sales"],
   "commands": "./commands/",
