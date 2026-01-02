@@ -1,5 +1,31 @@
 # Team Setup Guide
 
+## 🚀 Quick Start (5 minutes)
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/thekiln/kiln-plugins ~/kiln-plugins
+cd ~/kiln-plugins/client-pulse
+
+# 2. Setup your personal config (before installing plugin)
+cp .env.example .env          # Add your FATHOM_API_KEY
+cp config.example.yaml config.yaml  # Add your clients
+
+# 3. Add the MCP (one-time, global)
+claude mcp add rube-kiln --type http --url https://rube.app/mcp
+
+# 4. Install the plugin (run inside Claude Code)
+/plugin marketplace add ~/kiln-plugins
+/plugin install client-pulse@kiln-plugins
+
+# 5. Connect apps at https://rube.app (Slack, Monday, Gmail, Calendar)
+
+# 6. Test it
+/client-pulse sendoso
+```
+
+---
+
 ## Overview
 
 This plugin uses **one MCP** (Rube by Composio) for everything:
@@ -14,13 +40,45 @@ Plus **Fathom API** for meeting transcripts.
 
 ## Setup Steps (10 minutes)
 
-### 1. Create a Rube account
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/thekiln/kiln-plugins ~/kiln-plugins
+```
+
+> **Note:** You only need **read access** to the repo. You can't accidentally break the shared plugin code - your personal config files (`config.yaml`, `.env`) stay local and are gitignored. When the plugin is updated, just run `git pull` to get the latest.
+
+### 2. Install the plugin
+
+**Option A: Via marketplace (recommended for teams)**
+
+Add the kiln-plugins as a marketplace and install:
+
+```bash
+# Add the marketplace
+/plugin marketplace add ~/kiln-plugins
+
+# Install client-pulse
+/plugin install client-pulse@kiln-plugins
+```
+
+Now `/client-pulse` works in any Claude session.
+
+**Option B: Per-session (for testing/development)**
+
+```bash
+claude --plugin-dir ~/kiln-plugins/client-pulse
+```
+
+This only loads the plugin for that session.
+
+### 3. Create a Rube account
 
 1. Go to https://rube.app (or https://composio.dev)
 2. Sign up / create an account
 3. You'll use this to connect your apps
 
-### 2. Connect your apps in Rube
+### 4. Connect your apps in Rube
 
 In the Rube/Composio dashboard, connect these apps:
 
@@ -33,13 +91,7 @@ In the Rube/Composio dashboard, connect these apps:
 
 Each app will prompt OAuth - authorize access to your accounts.
 
-### 3. Clone the repo
-
-```bash
-git clone https://github.com/thekiln/kiln-plugins ~/kiln-plugins
-```
-
-### 4. Add Rube MCP (one-time, global)
+### 5. Add Rube MCP to Claude Code
 
 ```bash
 claude mcp add rube-kiln --type http --url https://rube.app/mcp
@@ -47,12 +99,12 @@ claude mcp add rube-kiln --type http --url https://rube.app/mcp
 
 This adds Rube to your global config (`~/.claude.json`) so it works everywhere.
 
-### 5. Get your Fathom API key
+### 6. Get your Fathom API key
 
 1. Go to https://fathom.video/settings/api
 2. Copy your API key
 
-### 6. Create your personal config files
+### 7. Create your personal config files
 
 ```bash
 cd ~/kiln-plugins/client-pulse
@@ -77,16 +129,32 @@ Edit `config.yaml`:
 - Monday board ID: From URL `monday.com/boards/[THIS_NUMBER]`
 - Slack user ID: View profile → More → Copy member ID
 
-### 7. Test it
+### 8. Test it
+
+Start a new Claude session:
 
 ```bash
-claude --plugin-dir ~/kiln-plugins/client-pulse
+claude
+```
+
+You should see on startup:
+```
+✓ Config loaded from /path/to/client-pulse/config.yaml
+Environment loaded from /path/to/client-pulse (FATHOM_API_KEY set)
+```
+
+If config.yaml is missing, you'll see:
+```
+⚠️  Missing config.yaml - copy the example to get started:
+   cp /path/to/config.example.yaml /path/to/config.yaml
 ```
 
 Then run:
 ```
 /client-pulse sendoso
 ```
+
+If it works, you'll see the agent fetch Slack messages, Monday tasks, and generate a report.
 
 ---
 
@@ -105,16 +173,21 @@ Then run:
 
 ## What's Shared vs Personal
 
-| Component | Shared (in repo) | Personal (per person) |
+| Component | Shared (in repo) | Personal (gitignored) |
 |-----------|------------------|----------------------|
-| Plugin code | ✅ | |
-| Agent prompts | ✅ | |
-| `config.example.yaml` | ✅ (template) | |
-| `config.yaml` | | ✅ (your clients, gitignored) |
-| `.env` file | | ✅ (your API keys, gitignored) |
-| Fathom API key | | ✅ |
-| Rube account | | ✅ |
-| Rube app connections | | ✅ |
+| Plugin code | ✅ Read-only | |
+| Agent prompts | ✅ Read-only | |
+| `config.example.yaml` | ✅ Template | |
+| `config.yaml` | | ✅ Your clients |
+| `.env` file | | ✅ Your API keys |
+| Rube account | | ✅ Your connections |
+
+**You can't break shared code.** Personal files are gitignored - they never leave your machine.
+
+**To get plugin updates:**
+```bash
+cd ~/kiln-plugins && git pull
+```
 
 **Each team member customizes:**
 - Which clients they work with
@@ -138,12 +211,35 @@ Then run:
 
 ## Quick Reference
 
-**Commands:**
+### TL;DR Setup (copy-paste)
+
+```bash
+# 1. Clone
+git clone https://github.com/thekiln/kiln-plugins ~/kiln-plugins
+
+# 2. Configure first (before installing)
+cd ~/kiln-plugins/client-pulse
+cp .env.example .env
+cp config.example.yaml config.yaml
+# Edit .env with your Fathom API key
+# Edit config.yaml with your clients
+
+# 3. Add MCP (run from any directory)
+claude mcp add rube-kiln --type http --url https://rube.app/mcp
+
+# 4. Install plugin (run inside Claude Code)
+/plugin marketplace add ~/kiln-plugins
+/plugin install client-pulse@kiln-plugins
+```
+
+### Commands
+
 - `/client-pulse` - All clients
 - `/client-pulse sendoso` - Sendoso only
 - `/client-pulse profound 14` - Profound, last 14 days
 
-**Verify MCP:**
+### Verify Setup
+
 ```bash
 claude mcp list
 ```
@@ -153,7 +249,10 @@ Should show:
 rube-kiln: https://rube.app/mcp (HTTP) - ✓ Connected
 ```
 
-**Rube Dashboard:** https://rube.app (manage app connections)
+### Key Links
+
+- **Rube Dashboard:** https://rube.app (manage app connections)
+- **Fathom API Key:** https://fathom.video/settings/api
 
 ---
 

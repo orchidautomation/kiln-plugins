@@ -1,14 +1,26 @@
 {
   "name": "kiln-plugins",
-  "displayName": "The Kiln GTM Plugins",
-  "description": "GTM engineering plugins for client management, intelligence gathering, and workflow automation",
-  "author": "The Kiln",
-  "homepage": "https://thekiln.com",
+  "owner": {
+    "name": "The Kiln",
+    "email": "engineering@thekiln.com",
+    "url": "https://thekiln.com"
+  },
+  "metadata": {
+    "description": "GTM engineering automation plugins for client intelligence and workflow automation",
+    "version": "1.0.0"
+  },
   "plugins": [
     {
       "name": "client-pulse",
-      "path": "client-pulse",
-      "description": "Aggregates Slack, Monday.com, Fathom, Calendar, and Gmail to provide comprehensive client pulse checks"
+      "source": "./client-pulse",
+      "description": "Multi-source client intelligence aggregator. Pulls data from Slack, Monday.com, Fathom, Google Calendar, and Gmail into actionable reports with priorities and action items.",
+      "version": "1.0.0",
+      "author": {
+        "name": "The Kiln GTM Engineering Team"
+      },
+      "keywords": ["gtm", "clients", "slack", "monday", "fathom", "intelligence"],
+      "category": "productivity",
+      "tags": ["team", "automation", "sales"]
     }
   ]
 }

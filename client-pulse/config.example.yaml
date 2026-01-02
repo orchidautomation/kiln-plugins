@@ -11,64 +11,118 @@
 # =============================================================================
 me:
   name: "Your Name"
-  role: "GTM Engineer"  # or "Technical Operations Specialist", etc.
+  role: "GTM Engineer"
   email: "you@company.com"
-  slack_id: "U12345678"  # Your Slack member ID
+  slack_id: "U12345678"  # Your Slack member ID (View Profile > More > Copy member ID)
+
+# =============================================================================
+# TEAM MEMBERS
+# List all team members for workload tracking and attribution
+# =============================================================================
+team:
+  - name: "Your Name"
+    slack_id: "U12345678"
+    role: "GTM Engineer"
+  # Add team members:
+  # - name: "Teammate Name"
+  #   slack_id: "U87654321"
+  #   role: "GTM Engineer"
 
 # =============================================================================
 # CLIENT CONFIGURATION
 # Add one entry per client you work with
+# The key (e.g., "sendoso") is what you use in commands: /client-pulse sendoso
 # =============================================================================
 clients:
-  # Example client - copy this block for each client
-  client_key:  # lowercase, no spaces (used in commands: /client-pulse client_key)
-    display_name: "Client Name"
+  # -------------------------------------------------------------------------
+  # EXAMPLE CLIENT - Copy and customize this block for each client
+  # -------------------------------------------------------------------------
+  example_client:  # lowercase, no spaces
+    display_name: "Example Client"
     emoji: "🏢"
     description: "What this client does"
 
-    # Domains for filtering Fathom calls and emails
-    domains:
-      - "clientdomain.com"
-      - "client.io"
+    # -----------------------------------------------------------------------
+    # FATHOM FILTERING
+    # Two-tier filtering for meeting transcripts
+    # -----------------------------------------------------------------------
+    fathom:
+      # For EXTERNAL calls: Match these domains in calendar_invitees[].email_domain
+      external_domains:
+        - "exampleclient.com"
+        - "example.io"
 
-    # Keywords for filtering internal sync transcripts
-    keywords:
-      - "Client Name"
-      - "Contact Name"
-      - "Product Name"
+      # For INTERNAL syncs: Search transcript/summary for these keywords
+      internal_keywords:
+        - "Example Client"
+        - "Jane Doe"          # Primary contact name
+        - "ProductName"       # Their product/feature names
+        - "relevant term"
 
-    # Primary contacts at this client
+    # -----------------------------------------------------------------------
+    # CONTACTS
+    # Client contacts for attribution and filtering
+    # Slack IDs are REQUIRED for accurate message attribution
+    # -----------------------------------------------------------------------
     contacts:
       - name: "Jane Doe"
-        slack_id: "U87654321"  # Their Slack ID (from Slack Connect)
+        slack_id: "U87654321"  # REQUIRED: Their Slack ID from Slack Connect
         role: "Primary POC"
+        is_primary: true       # Marks this as the main point of contact
       - name: "John Smith"
+        slack_id: "U11111111"
         role: "Stakeholder"
+        is_primary: false
+      # Add more contacts...
 
-    # Slack channels for this client
+    # -----------------------------------------------------------------------
+    # SLACK CHANNELS
+    # -----------------------------------------------------------------------
     slack:
       external:
-        id: "C12345678"  # Right-click channel > Copy link > extract ID
+        id: "C12345678"        # Right-click channel > Copy link > extract ID
         name: "ext-client-name"
       internal:
         id: "C87654321"
         name: "int-client-name"
 
-    # Monday.com board for this client
+    # -----------------------------------------------------------------------
+    # MONDAY.COM
+    # -----------------------------------------------------------------------
     monday:
-      board_id: 1234567890  # From Monday URL: monday.com/boards/[THIS_NUMBER]
+      board_id: 1234567890     # From URL: monday.com/boards/[THIS_NUMBER]
       board_name: "Client // Projects"
 
+      # Status mappings - define which statuses mean what
+      status_mappings:
+        active:
+          - "Working on it"
+          - "In Progress"
+          - "To Do"
+        stuck:
+          - "Stuck"
+          - "Blocked"
+          - "Waiting on Client"
+        done:
+          - "Done"
+          - "Complete"
+          - "Shipped"
+
+      # Tasks past due by this many days are flagged (0 = any past due date)
+      overdue_threshold_days: 0
+
   # -------------------------------------------------------------------------
-  # Add more clients below (copy the block above)
+  # ADD MORE CLIENTS BELOW
+  # Copy the example_client block above and customize
   # -------------------------------------------------------------------------
   # another_client:
   #   display_name: "Another Client"
+  #   emoji: "🚀"
   #   ...
 
 # =============================================================================
 # DATA SOURCE CONFIGURATION
-# Usually don't need to change these
+# Tune limits and behavior per data source
 # =============================================================================
 data_sources:
   fathom:
@@ -78,34 +132,99 @@ data_sources:
 
   slack:
     enabled: true
-    external_channel_limit: 200
-    internal_channel_limit: 100
+    external_channel_limit: 200  # More messages for client channels (critical)
+    internal_channel_limit: 100  # Fewer for internal channels
 
   monday:
     enabled: true
-    active_group_id: "Active"  # Group name for active tasks
+    active_group_id: "Active"    # Group name containing active tasks
     task_limit: 100
 
   gmail:
     enabled: true
     max_results: 50
-    priority: "low"
+    priority: "low"              # Email is rarely used for client comms
 
   calendar:
     enabled: true
-    lookahead_days: 14
+    lookahead_days: 14           # How far ahead to look for upcoming meetings
 
 # =============================================================================
 # AGENT BEHAVIOR
+# Fine-tune how the agent analyzes and reports
 # =============================================================================
 behavior:
   default_lookback_days: 7
-  expand_all_threads_in_range: true
+  expand_all_threads_in_range: true  # NEVER skip threads
 
+  # -------------------------------------------------------------------------
+  # URGENCY THRESHOLDS
+  # -------------------------------------------------------------------------
   urgent_thresholds:
-    unanswered_hours: 24
-    overdue_task_days: 0
-    stale_thread_days: 3
+    unanswered_hours: 24         # Client question without response
+    overdue_task_days: 0         # 0 = any past due date
+    stale_thread_days: 3         # Thread with no activity
 
+  # -------------------------------------------------------------------------
+  # RESOLUTION SIGNALS
+  # How to determine if an item is resolved vs still open
+  # -------------------------------------------------------------------------
+  resolution_signals:
+    # These words/phrases mean the item is RESOLVED (don't report as open)
+    completion:
+      - "done"
+      - "completed"
+      - "shipped"
+      - "live"
+      - "pushed"
+      - "sent"
+      - "delivered"
+      - "finished"
+
+    acknowledgment:
+      - "thanks"
+      - "thank you"
+      - "perfect"
+      - "looks good"
+      - "approved"
+      - "great"
+      - "awesome"
+
+  open_signals:
+    # These words indicate a promise was made but not yet confirmed complete
+    promise_without_followup:
+      - "will do"
+      - "on it"
+      - "looking into it"
+      - "i'll check"
+      - "working on it"
+      - "will send"
+
+    # These indicate the client is still waiting
+    waiting:
+      - "still waiting"
+      - "any update"
+      - "following up"
+      - "checking in"
+      - "just wanted to follow up"
+
+  # -------------------------------------------------------------------------
+  # MINIMUM REQUIREMENTS
+  # -------------------------------------------------------------------------
   minimum_sources_required: 1
-  required_source: "slack_external"
+  required_source: "slack_external"  # Must have this source for valid report
+
+# =============================================================================
+# HOW TO FIND IDs
+# =============================================================================
+# Slack Channel ID:
+#   Right-click channel > Copy link > extract C12345678 from URL
+#
+# Slack User ID:
+#   View profile > More (three dots) > Copy member ID
+#
+# Monday Board ID:
+#   From URL: monday.com/boards/[THIS_NUMBER]
+#
+# Client Email Domains:
+#   Look at their email addresses (e.g., jane@exampleclient.com → exampleclient.com)
