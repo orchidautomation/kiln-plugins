@@ -1,5 +1,5 @@
 ---
-name: client-pulse
+name: main
 description: Aggregates Slack, Monday.com, Fathom, Calendar, and Gmail to provide a comprehensive client pulse check with action items and priorities. Use when asked about client status, what needs attention, or before client calls.
 model: opus
 permissionMode: bypassPermissions
